@@ -48,6 +48,7 @@ That's it!
 * Upload single file
 * Upload multiple files
 * Download file
+* PostgREST compatible API syntax
 * Group By, Having - Work in Progress - :racehorse::racehorse:
 
 Use HTTP clients like [Postman](https://www.getpostman.com/) or [similar tools](https://chrome.google.com/webstore/search/http%20client?_category=apps) to invoke REST API calls
@@ -64,6 +65,99 @@ if you haven't on your system.
 ## Root URL
 Root URL (localhost:3000/) returns all REST API urls for each table in schema.
 
+## PostgREST Compatibility (New!)
+xmysql now supports PostgREST-style API parameters, making it compatible with PostgREST clients (like `@supabase/postgrest-js`).
+
+### Filtering
+You can use PostgREST syntax for filtering:
+```
+/api/payments?amount=gte.1000&customerNumber=lte.120
+/api/offices?city=in.(Boston,NYC,Paris)
+```
+
+Supported operators:
+- `eq`: Equals
+- `gt`: Greater than
+- `gte`: Greater than or equal
+- `lt`: Less than
+- `lte`: Less than or equal
+- `neq`: Not equal
+- `like`: Like operator
+- `ilike`: Case-insensitive like (mapped to LIKE in MySQL)
+- `in`: One of a list of values
+- `is`: Checking for null (`is.null` or `is.false` or `is.true`)
+
+### Selecting Fields & Resource Embedding
+Select specific fields or embedded resources (joins):
+```
+/api/customers?select=customerNumber,customerName
+/api/customers?select=*,orders(*)
+/api/customers?select=customerName,orders(orderNumber,amount)
+```
+
+### Ordering
+Sort results:
+```
+/api/payments?order=amount.desc,checkNumber.asc
+```
+
+### Pagination
+Limit and Offset:
+```
+/api/payments?limit=10&offset=5
+```
+
+### Upsert (Insert or Update)
+Use the `Resolution` header to handle duplicates:
+- `Resolution: merge-duplicates`: Performs an `INSERT ... ON DUPLICATE KEY UPDATE`.
+- `Resolution: ignore-duplicates`: Performs an `INSERT IGNORE`.
+
+### Headers
+- `Prefer: count=exact`: Returns total count in `Content-Range` header.
+- `Prefer: return=representation`: Returns the created/updated/deleted rows in the response body.
+
+## Security & Row Level Security (RLS)
+xmysql supports JWT-based authentication and mechanism for Row Level Security (RLS) similar to PostgREST.
+
+### Authentication
+Start xmysql with a JWT secret:
+```
+xmysql -h localhost -u root -p password -d dbname --jwtSecret mysecretkey
+```
+Include the JWT in the `Authorization` header:
+```
+Authorization: Bearer <token>
+```
+
+### Row Level Security (RLS)
+When a valid JWT is provided, xmysql decodes the claims and sets them as MySQL session variables before executing the query. The variables are prefixed with `request_jwt_claim_`.
+
+For example, if your JWT payload is:
+```json
+{
+  "sub": "123",
+  "role": "user",
+  "email": "user@example.com"
+}
+```
+
+xmysql executes:
+```sql
+SET @request_jwt_claim_sub = '123', @request_jwt_claim_role = 'user', @request_jwt_claim_email = 'user@example.com';
+```
+
+You can use these variables in MySQL Views to implement RLS:
+
+```sql
+CREATE VIEW my_orders AS
+SELECT * FROM orders
+WHERE customer_id = @request_jwt_claim_sub;
+```
+
+Then access the view via the API:
+```
+/api/my_orders
+```
 
 ## CRUD APIs Usual Suspects
 * GET&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     /api/tableName

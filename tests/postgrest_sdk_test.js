@@ -120,25 +120,74 @@ describe('PostgREST SDK Tests', function() {
         assert.equal(single.task, 'Task 3');
     });
     
-    it('Test 6: Update', async function() {
+    it('Test 6: Update with select()', async function() {
         const { data: updated, error: updateError } = await client
              .from('sdk_test')
              .update({ status: 'archived' })
              .eq('task', 'Task 1')
              .select(); // Request representation
-
-        // Note: Update with select() requires similar logic to Create (Prefer: return=representation)
-        // Does my update() support it? Not yet.
-        // PostgREST Client sends Prefer: return=representation.
-        // I haven't implemented it for UPDATE.
         
-        // I will comment this out or expect it to fail/return null data if not implemented.
-        // If I haven't implemented return=representation for UPDATE, it returns default (200 metadata).
-        // The client `data` will be null or the metadata object if it parses it.
-        // But if I use `.select()`, the client expects data.
-        
-        // Let's see what happens.
         if (updateError) throw updateError;
-        // console.log('Update result:', updated);
+        assert(Array.isArray(updated), 'Updated should be array');
+        assert.equal(updated.length, 1);
+        assert.equal(updated[0].status, 'archived');
+        assert.equal(updated[0].task, 'Task 1');
+    });
+
+    it('Test 7: Delete', async function() {
+        // Simple delete, no return
+        const { error: deleteError } = await client
+            .from('sdk_test')
+            .delete()
+            .eq('task', 'Task 2');
+            
+        if (deleteError) throw deleteError;
+        
+        // Verify it's gone
+        const { data: check, error: checkError } = await client
+            .from('sdk_test')
+            .select('*')
+            .eq('task', 'Task 2');
+            
+        if (checkError) throw checkError;
+        assert.equal(check.length, 0);
+    });
+
+    it('Test 8: Delete with select()', async function() {
+        // Insert one to delete
+        await client.from('sdk_test').insert({ task: 'To Delete', status: 'temp' });
+
+        const { data: deleted, error: deleteError } = await client
+            .from('sdk_test')
+            .delete()
+            .eq('task', 'To Delete')
+            .select();
+            
+        if (deleteError) throw deleteError;
+        assert(Array.isArray(deleted), 'Deleted should be array');
+        assert.equal(deleted.length, 1);
+        assert.equal(deleted[0].task, 'To Delete');
+    });
+
+    it('Test 9: Advanced Filters', async function() {
+        // Clear and seed specific data
+        await client.from('sdk_test').delete().neq('id', 0);
+        await client.from('sdk_test').insert([
+            { task: 'A', status: '10' },
+            { task: 'B', status: '20' },
+            { task: 'C', status: '30' }
+        ]);
+
+        // gt
+        const { data: gtData } = await client.from('sdk_test').select('*').gt('status', '15');
+        assert.equal(gtData.length, 2); // 20, 30
+
+        // in
+        const { data: inData } = await client.from('sdk_test').select('*').in('task', ['A', 'C']);
+        assert.equal(inData.length, 2); // A, C
+
+        // like
+        const { data: likeData } = await client.from('sdk_test').select('*').like('task', 'B');
+        assert.equal(likeData.length, 1); // B
     });
 });
