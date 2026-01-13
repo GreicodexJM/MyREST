@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const express = require('express');
 const sqlConfig = require('commander');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 const Xapi = require('./lib/xapi.js');
 const cmdargs = require('./lib/util/cmd.helper.js');
@@ -24,6 +24,7 @@ app.use(bodyParser.urlencoded({
 
 
 /**************** START : setup mysql ****************/
+sqlConfig.decimalNumbers = true;
 let mysqlPool = mysql.createPool(sqlConfig);
 /**************** END : setup mysql ****************/
 

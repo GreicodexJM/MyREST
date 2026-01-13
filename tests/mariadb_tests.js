@@ -18,6 +18,7 @@ var server = {}
 
 
 args['host'] = 'localhost'
+args['port'] = 3307
 args['user'] = 'root'
 args['password'] = 'toor'
 args['database'] = 'classicmodels'
@@ -25,7 +26,7 @@ args['decimalNumbers'] = true
 
 
 //desribe group of tests done
-describe('xmysql : tests', function () {
+describe('xmysql : mariadb tests', function () {
 
   before(function (done) {
 
@@ -45,7 +46,7 @@ describe('xmysql : tests', function () {
       if (err) {
         process.exit(1)
       }
-      server = app.listen(3000)
+      server = app.listen(3001)
       done();
     })
   });
@@ -735,7 +736,9 @@ describe('xmysql : tests', function () {
         }
 
         //validate response
-        res.body[0]['city'].should.be.equals("NYC")
+        // NYC and Madrid both have 5 entries. Order is non-deterministic on some DBs
+        // res.body[0]['city'].should.be.equals("NYC")
+        res.body[0]['count'].should.be.equals(5)
         res.body.length.should.be.equals(95)
 
         return done();
@@ -1113,6 +1116,8 @@ describe('xmysql : tests', function () {
 
     done()
 
+    //console.log(query,params,err);
+
   });
 
 
@@ -1135,6 +1140,8 @@ describe('xmysql : tests', function () {
     err.params[5].should.be.equal('3')
 
     done()
+
+    //console.log(query,params,err);
 
   });
 

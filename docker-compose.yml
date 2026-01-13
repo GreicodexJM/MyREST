@@ -1,0 +1,14 @@
+services:
+  mariadb:
+    image: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=toor
+    ports:
+      - 3307:3306
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=toor
+    ports:
+      - 3306:3306
+
