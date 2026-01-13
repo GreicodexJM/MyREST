@@ -11,4 +11,14 @@ services:
       - MYSQL_ROOT_PASSWORD=toor
     ports:
       - 3306:3306
-
+  xmysql:
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      - DATABASE_HOST=mysql
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=toor
+      - DATABASE_NAME=mysql
+    depends_on:
+      - mysql

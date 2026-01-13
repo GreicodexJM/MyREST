@@ -112,6 +112,21 @@ Use the `Resolution` header to handle duplicates:
 - `Resolution: merge-duplicates`: Performs an `INSERT ... ON DUPLICATE KEY UPDATE`.
 - `Resolution: ignore-duplicates`: Performs an `INSERT IGNORE`.
 
+### Stored Procedures (RPC)
+Call stored procedures or functions using POST requests:
+```
+POST /rpc/add_numbers
+{ "a": 1, "b": 2 }
+```
+The API inspects the procedure parameters and maps the JSON body arguments to the procedure call.
+
+### OpenAPI Specification
+The API provides an OpenAPI 3.0 specification at:
+```
+GET /api/openapi.json
+```
+This can be used with Swagger UI or other tools to explore the API.
+
 ### Headers
 - `Prefer: count=exact`: Returns total count in `Content-Range` header.
 - `Prefer: return=representation`: Returns the created/updated/deleted rows in the response body.
@@ -119,11 +134,18 @@ Use the `Resolution` header to handle duplicates:
 ## Security & Row Level Security (RLS)
 xmysql supports JWT-based authentication and mechanism for Row Level Security (RLS) similar to PostgREST.
 
+For a detailed guide, see [docs/SECURITY_RLS.md](docs/SECURITY_RLS.md).
+
 ### Authentication
 Start xmysql with a JWT secret:
 ```
 xmysql -h localhost -u root -p password -d dbname --jwtSecret mysecretkey
 ```
+To require a valid JWT for all requests (disable anonymous access), use:
+```
+xmysql -h localhost -u root -p password -d dbname --jwtSecret mysecretkey --jwtRequired
+```
+
 Include the JWT in the `Authorization` header:
 ```
 Authorization: Bearer <token>
@@ -171,8 +193,10 @@ Then access the view via the API:
 * GET&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     /api/parentTable/:id/childTable 
 * DELETE&nbsp;  /api/tableName/:id
 * POST&nbsp;&nbsp;&nbsp;&nbsp;    /dynamic
+* POST&nbsp;&nbsp;&nbsp;&nbsp;    /rpc/procedure_name
 
 ## Other APIS
+* GET&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     /api/openapi.json
 * GET&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     /api/tableName/describe
 * GET&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     /api/tables
 
