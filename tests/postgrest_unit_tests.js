@@ -89,4 +89,46 @@ describe('postgrest where clause unit tests', function () {
     done()
   });
 
+  it('boolean true ?is_active=eq.true should convert to 1', function (done) {
+    var err = postgrestWhereClause.getWhereClause({ is_active: 'eq.true' })
+    err.query.should.be.equal('?? = ?')
+    err.params[0].should.be.equal('is_active')
+    err.params[1].should.be.equal(1)
+    done()
+  });
+
+  it('boolean false ?is_active=eq.false should convert to 0', function (done) {
+    var err = postgrestWhereClause.getWhereClause({ is_active: 'eq.false' })
+    err.query.should.be.equal('?? = ?')
+    err.params[0].should.be.equal('is_active')
+    err.params[1].should.be.equal(0)
+    done()
+  });
+
+  it('boolean with neq ?is_active=neq.true should convert to != 1', function (done) {
+    var err = postgrestWhereClause.getWhereClause({ is_active: 'neq.true' })
+    err.query.should.be.equal('?? != ?')
+    err.params[0].should.be.equal('is_active')
+    err.params[1].should.be.equal(1)
+    done()
+  });
+
+  it('boolean in list ?status=in.(true,false) should convert', function (done) {
+    var err = postgrestWhereClause.getWhereClause({ status: 'in.(true,false)' })
+    err.query.should.be.equal('?? IN (?)')
+    err.params[0].should.be.equal('status')
+    err.params[1].should.be.eql([1, 0])
+    done()
+  });
+
+  it('multiple conditions with boolean ?is_active=eq.true&role=eq.admin should PASS', function (done) {
+    var err = postgrestWhereClause.getWhereClause({ is_active: 'eq.true', role: 'eq.admin' })
+    err.query.should.be.equal('?? = ? AND ?? = ?')
+    err.params[0].should.be.equal('is_active')
+    err.params[1].should.be.equal(1)
+    err.params[2].should.be.equal('role')
+    err.params[3].should.be.equal('admin')
+    done()
+  });
+
 });

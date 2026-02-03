@@ -2,12 +2,20 @@
 # Provides targets for building, testing, and Docker operations
 
 # Variables
-PROJECT_NAME = myrest
-VERSION ?= $(shell node -p "require('./package.json').version")
+PROJECT_NAME = xmysql
+
+# Git-based versioning (automatic)
+GIT_TAG := $(shell git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+GIT_COMMIT := $(shell git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
+VERSION ?= $(GIT_TAG)-$(GIT_COMMIT)
+VERSION_CLEAN := $(shell echo $(GIT_TAG) | sed 's/^v//')
+
+# Docker settings
 DOCKER_REGISTRY ?= docker.io
-DOCKER_USERNAME ?= your-username
+DOCKER_USERNAME ?= greicodex
 DOCKER_IMAGE = $(DOCKER_REGISTRY)/$(DOCKER_USERNAME)/$(PROJECT_NAME)
-DOCKER_TAG ?= $(VERSION)
+DOCKER_TAG ?= $(VERSION_CLEAN)
 DOCKER_LATEST = $(DOCKER_IMAGE):latest
 
 # Node/npm settings
@@ -167,12 +175,90 @@ format: ## Format code (if configured)
 	@echo "$(YELLOW)Code formatting not configured yet$(NC)"
 
 version: ## Show current version
-	@echo "$(BLUE)Current version: $(VERSION)$(NC)"
+	@echo "$(BLUE)Version Information$(NC)"
+	@echo "  Git Tag:        $(GIT_TAG)"
+	@echo "  Git Commit:     $(GIT_COMMIT)"
+	@echo "  Git Branch:     $(GIT_BRANCH)"
+	@echo "  Version:        $(VERSION)"
+	@echo "  Docker Tag:     $(DOCKER_TAG)"
 
 info: ## Show project information
 	@echo "$(BLUE)Project Information$(NC)"
 	@echo "  Name:           $(PROJECT_NAME)"
 	@echo "  Version:        $(VERSION)"
+	@echo "  Git Tag:        $(GIT_TAG)"
+	@echo "  Git Commit:     $(GIT_COMMIT)"
+	@echo "  Git Branch:     $(GIT_BRANCH)"
 	@echo "  Node Version:   $$(node --version)"
 	@echo "  NPM Version:    $$(npm --version)"
 	@echo "  Docker Version: $$(docker --version 2>/dev/null || echo 'Not installed')"
+
+## Version Management Commands
+
+tag-patch: ## Create a new patch version tag (v1.0.0 -> v1.0.1)
+	@echo "$(BLUE)Creating patch version tag...$(NC)"
+	@if [ "$(GIT_TAG)" = "v0.0.0" ]; then \
+		NEW_TAG="v0.0.1"; \
+	else \
+		CURRENT=$$(echo $(GIT_TAG) | sed 's/^v//'); \
+		MAJOR=$$(echo $$CURRENT | cut -d. -f1); \
+		MINOR=$$(echo $$CURRENT | cut -d. -f2); \
+		PATCH=$$(echo $$CURRENT | cut -d. -f3); \
+		NEW_PATCH=$$((PATCH + 1)); \
+		NEW_TAG="v$$MAJOR.$$MINOR.$$NEW_PATCH"; \
+	fi; \
+	echo "$(YELLOW)New tag: $$NEW_TAG$(NC)"; \
+	git tag -a $$NEW_TAG -m "Release $$NEW_TAG"; \
+	echo "$(GREEN)✓ Tag created: $$NEW_TAG$(NC)"; \
+	echo "$(YELLOW)Push with: git push origin $$NEW_TAG$(NC)"
+
+tag-minor: ## Create a new minor version tag (v1.0.0 -> v1.1.0)
+	@echo "$(BLUE)Creating minor version tag...$(NC)"
+	@if [ "$(GIT_TAG)" = "v0.0.0" ]; then \
+		NEW_TAG="v0.1.0"; \
+	else \
+		CURRENT=$$(echo $(GIT_TAG) | sed 's/^v//'); \
+		MAJOR=$$(echo $$CURRENT | cut -d. -f1); \
+		MINOR=$$(echo $$CURRENT | cut -d. -f2); \
+		NEW_MINOR=$$((MINOR + 1)); \
+		NEW_TAG="v$$MAJOR.$$NEW_MINOR.0"; \
+	fi; \
+	echo "$(YELLOW)New tag: $$NEW_TAG$(NC)"; \
+	git tag -a $$NEW_TAG -m "Release $$NEW_TAG"; \
+	echo "$(GREEN)✓ Tag created: $$NEW_TAG$(NC)"; \
+	echo "$(YELLOW)Push with: git push origin $$NEW_TAG$(NC)"
+
+tag-major: ## Create a new major version tag (v1.0.0 -> v2.0.0)
+	@echo "$(BLUE)Creating major version tag...$(NC)"
+	@if [ "$(GIT_TAG)" = "v0.0.0" ]; then \
+		NEW_TAG="v1.0.0"; \
+	else \
+		CURRENT=$$(echo $(GIT_TAG) | sed 's/^v//'); \
+		MAJOR=$$(echo $$CURRENT | cut -d. -f1); \
+		NEW_MAJOR=$$((MAJOR + 1)); \
+		NEW_TAG="v$$NEW_MAJOR.0.0"; \
+	fi; \
+	echo "$(YELLOW)New tag: $$NEW_TAG$(NC)"; \
+	git tag -a $$NEW_TAG -m "Release $$NEW_TAG"; \
+	echo "$(GREEN)✓ Tag created: $$NEW_TAG$(NC)"; \
+	echo "$(YELLOW)Push with: git push origin $$NEW_TAG$(NC)"
+
+tag-push: ## Push all tags to origin
+	@echo "$(BLUE)Pushing tags to origin...$(NC)"
+	git push origin --tags
+	@echo "$(GREEN)✓ Tags pushed$(NC)"
+
+tag-list: ## List all version tags
+	@echo "$(BLUE)Version tags:$(NC)"
+	@git tag -l "v*" | sort -V
+
+tag-delete: ## Delete a tag (use: make tag-delete TAG=v1.0.0)
+	@if [ -z "$(TAG)" ]; then \
+		echo "$(RED)Error: TAG not specified$(NC)"; \
+		echo "$(YELLOW)Usage: make tag-delete TAG=v1.0.0$(NC)"; \
+		exit 1; \
+	fi
+	@echo "$(BLUE)Deleting tag $(TAG)...$(NC)"
+	git tag -d $(TAG)
+	git push origin :refs/tags/$(TAG)
+	@echo "$(GREEN)✓ Tag deleted: $(TAG)$(NC)"
