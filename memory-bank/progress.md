@@ -11,6 +11,7 @@
 - [x] RPC Support (Stored Procedures/Functions via `/rpc/funcName`)
 - [x] OpenAPI 3.0 Specification Generation (`/api/openapi.json`)
 - [x] PostgREST FK Hint Syntax Support (`column:table(fields)`)
+- [x] JSON Column Serialization for INSERT/UPDATE/PATCH operations
 
 ## In Progress
 - [ ] Full PostgREST compatibility (Other minor features)

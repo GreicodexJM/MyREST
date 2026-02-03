@@ -2,9 +2,15 @@
 
 ## Current Focus
 - PostgREST compatibility enhancements.
-- Bug fixes for foreign key relationship queries.
+- Bug fixes for JSON column handling and foreign key relationship queries.
 
 ## Recent Changes
+- **Fixed JSON Column Serialization Bug**: Resolved issue where JavaScript objects were converted to `'[object Object]'` instead of proper JSON strings for JSON-type columns.
+  - Added `serializeJsonColumns()` helper in `lib/util/data.helper.js` to properly serialize objects/arrays to JSON strings.
+  - Updated `create()`, `update()`, and `patch()` methods in `lib/xapi.js` to pre-process request bodies.
+  - Supports both single and bulk insert operations.
+  - Added comprehensive unit tests in `tests/json_serialization_test.js`.
+  - **Resolved**: `INSERT INTO table SET template_config = '[object Object]'` now correctly generates `template_config = '{"key":"value"}'`.
 - **Fixed PostgREST FK Hint Syntax Bug**: Implemented support for explicit foreign key hints using `column:table(fields)` syntax.
   - Updated `lib/util/selectParser.helper.js` to parse hint syntax (e.g., `trading_partner_id:trading_partner_templates(*)`).
   - Modified `lib/xsql.js` `getNestedQuery()` to accept and use explicit FK hints for relationship resolution.
