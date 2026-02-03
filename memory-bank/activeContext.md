@@ -1,11 +1,16 @@
 # Active Context
 
 ## Current Focus
-- Adding Docker Compose configuration for local testing.
-- Implementing Security and Row Level Security (RLS) for MySQL.
-- PostgREST compatibility.
+- PostgREST compatibility enhancements.
+- Bug fixes for foreign key relationship queries.
 
 ## Recent Changes
+- **Fixed PostgREST FK Hint Syntax Bug**: Implemented support for explicit foreign key hints using `column:table(fields)` syntax.
+  - Updated `lib/util/selectParser.helper.js` to parse hint syntax (e.g., `trading_partner_id:trading_partner_templates(*)`).
+  - Modified `lib/xsql.js` `getNestedQuery()` to accept and use explicit FK hints for relationship resolution.
+  - Updated `resolveSelectColumns()` and `resolveSelectColumnsForJson()` to pass hints to nested query builder.
+  - Added comprehensive unit tests in `tests/postgrest_fk_hint_test.js`.
+  - **Resolved**: SQL syntax error `NULL AS trading_partner:trading_partner_templates` now correctly generates `NULL AS trading_partner_templates`.
 - Updated `docker-compose.yml` to include `xmysql` service.
 - Added `jsonwebtoken` dependency.
 - Updated CLI (`lib/util/cmd.helper.js`) to accept `--jwtSecret`.

@@ -10,6 +10,7 @@
 - [x] `--jwtRequired` flag for enforcing authentication
 - [x] RPC Support (Stored Procedures/Functions via `/rpc/funcName`)
 - [x] OpenAPI 3.0 Specification Generation (`/api/openapi.json`)
+- [x] PostgREST FK Hint Syntax Support (`column:table(fields)`)
 
 ## In Progress
 - [ ] Full PostgREST compatibility (Other minor features)

@@ -13,6 +13,7 @@ services:
       - 3306:3306
   xmysql:
     build: .
+    image: greicodex/xmysql:latest
     ports:
       - 3000:3000
     environment:
@@ -20,5 +21,7 @@ services:
       - DATABASE_USER=root
       - DATABASE_PASSWORD=toor
       - DATABASE_NAME=mysql
+      - JWT_SECRET=
+      - JWT_REQUIRED=false
     depends_on:
       - mysql
