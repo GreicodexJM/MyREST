@@ -1,9 +1,9 @@
-![npm version](https://img.shields.io/node/v/xmysql.svg)
-[![Build Status](https://travis-ci.org/o1lab/xmysql.svg?branch=master)](https://travis-ci.org/o1lab/xmysql)
-[![GitHub stars](https://img.shields.io/github/stars/o1lab/xmysql.svg?style=plastic)](https://github.com/o1lab/xmysql/stargazers)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/o1lab/xmysql/master/LICENSE)
+![npm version](https://img.shields.io/node/v/myrest.svg)
+[![Build Status](https://travis-ci.org/o1lab/myrest.svg?branch=master)](https://travis-ci.org/o1lab/myrest)
+[![GitHub stars](https://img.shields.io/github/stars/o1lab/myrest.svg?style=plastic)](https://github.com/o1lab/myrest/stargazers)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/o1lab/myrest/master/LICENSE)
 
-# xmysql: one command to generate REST APIs for **any** MySql database
+# myrest: one command to generate REST APIs for **any** MySql database
 
 ## Why this ?
 Generating REST APIs quickly for a MySql database which does not follow conventions of 
@@ -15,15 +15,15 @@ frameworks such as rails, django etc is a small adventure that one rather like t
 
 Hence this.
 
-Powered by node packages : ([express](https://github.com/expressjs/express), [mysql](https://github.com/mysqljs/mysql)) => { [xmysql](https://github.com/o1lab/xmysql) }
+Powered by node packages : ([express](https://github.com/expressjs/express), [mysql](https://github.com/mysqljs/mysql)) => { [myrest](https://github.com/o1lab/myrest) }
 
 
 ## Setup and Usage
 ```
-npm install -g xmysql
+npm install -g myrest
 ```
 ```
-xmysql -h localhost -u mysqlUsername -p mysqlPassword -d databaseName
+myrest -h localhost -u mysqlUsername -p mysqlPassword -d databaseName
 ```
 ```
 http://localhost:3000
@@ -66,7 +66,7 @@ if you haven't on your system.
 Root URL (localhost:3000/) returns all REST API urls for each table in schema.
 
 ## PostgREST Compatibility (New!)
-xmysql now supports PostgREST-style API parameters, making it compatible with PostgREST clients (like `@supabase/postgrest-js`).
+myrest now supports PostgREST-style API parameters, making it compatible with PostgREST clients (like `@supabase/postgrest-js`).
 
 ### Filtering
 You can use PostgREST syntax for filtering:
@@ -132,18 +132,18 @@ This can be used with Swagger UI or other tools to explore the API.
 - `Prefer: return=representation`: Returns the created/updated/deleted rows in the response body.
 
 ## Security & Row Level Security (RLS)
-xmysql supports JWT-based authentication and mechanism for Row Level Security (RLS) similar to PostgREST.
+myrest supports JWT-based authentication and mechanism for Row Level Security (RLS) similar to PostgREST.
 
 For a detailed guide, see [docs/SECURITY_RLS.md](docs/SECURITY_RLS.md).
 
 ### Authentication
-Start xmysql with a JWT secret:
+Start myrest with a JWT secret:
 ```
-xmysql -h localhost -u root -p password -d dbname --jwtSecret mysecretkey
+myrest -h localhost -u root -p password -d dbname --jwtSecret mysecretkey
 ```
 To require a valid JWT for all requests (disable anonymous access), use:
 ```
-xmysql -h localhost -u root -p password -d dbname --jwtSecret mysecretkey --jwtRequired
+myrest -h localhost -u root -p password -d dbname --jwtSecret mysecretkey --jwtRequired
 ```
 
 Include the JWT in the `Authorization` header:
@@ -152,7 +152,7 @@ Authorization: Bearer <token>
 ```
 
 ### Row Level Security (RLS)
-When a valid JWT is provided, xmysql decodes the claims and sets them as MySQL session variables before executing the query. The variables are prefixed with `request_jwt_claim_`.
+When a valid JWT is provided, myrest decodes the claims and sets them as MySQL session variables before executing the query. The variables are prefixed with `request_jwt_claim_`.
 
 For example, if your JWT payload is:
 ```json
@@ -163,7 +163,7 @@ For example, if your JWT payload is:
 }
 ```
 
-xmysql executes:
+myrest executes:
 ```sql
 SET @request_jwt_claim_sub = '123', @request_jwt_claim_role = 'user', @request_jwt_claim_email = 'user@example.com';
 ```
@@ -383,7 +383,7 @@ eg: retrieves numeric aggregate can be done for multiple columns too
 
 
 ## Relational Tables
-xmysql identifies foreign key relations automatically and provides GET api.
+myrest identifies foreign key relations automatically and provides GET api.
 ```
 /api/customers/103/payments
 ```
@@ -467,26 +467,26 @@ http://localhost:3000/download?name=fileName
 
   Examples:
 
-    $ xmysql -u username -p password -d databaseSchema
+    $ myrest -u username -p password -d databaseSchema
 ```
 
 
 # Docker
 
-Simply build with `docker build -t xmysql .` and run with `docker run -p 3000:3000 -d xmysql`
+Simply build with `docker build -t myrest .` and run with `docker run -p 3000:3000 -d myrest`
 
-The best way for testing is to run mysql in a docker container too and create a docker network, so that `xmysql` can access the `mysql` container with a name from docker network.
+The best way for testing is to run mysql in a docker container too and create a docker network, so that `myrest` can access the `mysql` container with a name from docker network.
 
 1. Create network 
     * `docker network create mynet`
 2. Start mysql with docker name `some-mysql` and bind to docker network `mynet`
     * `docker run --name some-mysql -p 3306:3306 --net mynet -e MYSQL_ROOT_PASSWORD=password -d mysql`
-3. build xmysql container (if not done yet)
-    * `docker build -t xmysql .`
-4. run xmysql and set env variable for `some-mysql` from step 2
-    * `docker run -p 3000:3000 -d -e DATABASE_HOST=some-mysql --net mynet xmysql`
+3. build myrest container (if not done yet)
+    * `docker build -t myrest .`
+4. run myrest and set env variable for `some-mysql` from step 2
+    * `docker run -p 3000:3000 -d -e DATABASE_HOST=some-mysql --net mynet myrest`
 
-You can also pass the environment variables to a file and use them as an option with docker like `docker run --env-file ./env.list -p 3000:3000 --net mynet -d xmysql`
+You can also pass the environment variables to a file and use them as an option with docker like `docker run --env-file ./env.list -p 3000:3000 --net mynet -d myrest`
 
 environment variables which can be used:
 

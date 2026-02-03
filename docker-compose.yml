@@ -11,9 +11,9 @@ services:
       - MYSQL_ROOT_PASSWORD=toor
     ports:
       - 3306:3306
-  xmysql:
+  myrest:
     build: .
-    image: greicodex/xmysql:latest
+    image: greicodex/myrest:latest
     ports:
       - 3000:3000
     environment:

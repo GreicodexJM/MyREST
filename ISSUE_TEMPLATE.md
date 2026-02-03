@@ -3,11 +3,11 @@
 Please provide dev environment versions of your system
 
 node -v
-( xmysql requires node >= 7.6.0 )
+( myrest requires node >= 7.6.0 )
 
 npm -v
 mysql --version
-xmysql --version
+myrest --version
 
 - - -
 

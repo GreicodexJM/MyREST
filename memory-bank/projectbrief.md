@@ -1,6 +1,6 @@
-# Project Brief: MyREST (xmysql)
+# Project Brief: MyREST (myrest)
 
-MyREST (based on `xmysql`) is a command-line tool that automatically generates a RESTful API for any MySQL database. It inspects the database schema and provides endpoints for CRUD operations, complex queries, and file handling without requiring manual boilerplate code.
+MyREST (based on `myrest`) is a command-line tool that automatically generates a RESTful API for any MySQL database. It inspects the database schema and provides endpoints for CRUD operations, complex queries, and file handling without requiring manual boilerplate code.
 
 ## Core Features
 -   **Zero Configuration**: Connects to a MySQL database and serves APIs instantly.

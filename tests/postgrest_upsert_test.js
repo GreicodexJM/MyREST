@@ -20,7 +20,7 @@ args['password'] = 'toor'
 args['database'] = 'classicmodels'
 args['decimalNumbers'] = true
 
-describe('xmysql : postgrest upsert tests', function () {
+describe('myrest : postgrest upsert tests', function () {
 
   before(function (done) {
     mysqlPool = mysql.createPool(args)

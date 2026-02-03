@@ -30,7 +30,7 @@ describe('OpenAPI Generator Unit Tests', function () {
         let spec = openapiHelper.generate(metaDb, host);
 
         spec.openapi.should.equal('3.0.0');
-        spec.info.title.should.equal('xmysql generated API');
+        spec.info.title.should.equal('myrest generated API');
         spec.servers[0].url.should.equal(host);
 
         // Check paths

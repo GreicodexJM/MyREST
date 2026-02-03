@@ -1,5 +1,5 @@
 {
-  "name": "xmysql",
+  "name": "myrest",
   "version": "0.0.9",
   "description": "One command to generate REST APIs for any MySql database",
   "main": "index.js",
@@ -16,10 +16,10 @@
     "node": ">= 7.6.0"
   },
   "bin": {
-    "xmysql": "bin/index.js"
+    "myrest": "bin/index.js"
   },
-  "repository": "o1lab/xmysql",
-  "homepage": "https://github.com/o1lab/xmysql",
+  "repository": "o1lab/myrest",
+  "homepage": "https://github.com/o1lab/myrest",
   "author": "o1lab",
   "license": "MIT",
   "dependencies": {

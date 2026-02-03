@@ -17,7 +17,7 @@
   - Updated `resolveSelectColumns()` and `resolveSelectColumnsForJson()` to pass hints to nested query builder.
   - Added comprehensive unit tests in `tests/postgrest_fk_hint_test.js`.
   - **Resolved**: SQL syntax error `NULL AS trading_partner:trading_partner_templates` now correctly generates `NULL AS trading_partner_templates`.
-- Updated `docker-compose.yml` to include `xmysql` service.
+- Updated `docker-compose.yml` to include `myrest` service.
 - Added `jsonwebtoken` dependency.
 - Updated CLI (`lib/util/cmd.helper.js`) to accept `--jwtSecret`.
 - Implemented JWT verification middleware in `lib/xapi.js`.

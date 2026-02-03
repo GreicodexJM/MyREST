@@ -1,8 +1,8 @@
-# Makefile for MyREST (xmysql)
+# Makefile for MyREST (myrest)
 # Provides targets for building, testing, and Docker operations
 
 # Variables
-PROJECT_NAME = xmysql
+PROJECT_NAME = myrest
 
 # Git-based versioning (automatic)
 GIT_TAG := $(shell git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
@@ -36,7 +36,7 @@ NC = \033[0m # No Color
 .DEFAULT_GOAL := help
 
 help: ## Display this help message
-	@echo "$(BLUE)MyREST (xmysql) - Makefile Commands$(NC)"
+	@echo "$(BLUE)MyREST (myrest) - Makefile Commands$(NC)"
 	@echo ""
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(GREEN)%-20s$(NC) %s\n", $$1, $$2}'
 	@echo ""

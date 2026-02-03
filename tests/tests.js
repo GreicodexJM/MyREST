@@ -25,7 +25,7 @@ args['decimalNumbers'] = true
 
 
 //desribe group of tests done
-describe('xmysql : tests', function () {
+describe('myrest : tests', function () {
 
   before(function (done) {
 

@@ -1,6 +1,6 @@
 # Security and Row Level Security (RLS) Guide
 
-MyREST (xmysql) provides built-in support for JWT authentication and Row Level Security (RLS) using MySQL Views. This guide explains how to secure your API and implement granular access control.
+MyREST (myrest) provides built-in support for JWT authentication and Row Level Security (RLS) using MySQL Views. This guide explains how to secure your API and implement granular access control.
 
 ## Overview
 
@@ -13,21 +13,21 @@ The security model mimics [PostgREST](https://postgrest.org/):
 
 ### Prerequisites
 -   A running MySQL database.
--   `xmysql` installed.
+-   `myrest` installed.
 -   A JWT secret (a secure random string).
 
 ### Starting the Server
-Start `xmysql` with the `--jwtSecret` option:
+Start `myrest` with the `--jwtSecret` option:
 
 ```bash
-xmysql -h localhost -u root -p password -d my_database --jwtSecret "my_super_secure_secret"
+myrest -h localhost -u root -p password -d my_database --jwtSecret "my_super_secure_secret"
 ```
 
 ### Enforcing Authentication
 By default, requests without a JWT are allowed (anonymous access). To block requests without a valid token, use the `--jwtRequired` flag:
 
 ```bash
-xmysql -h localhost -u root -p password -d my_database --jwtSecret "my_super_secure_secret" --jwtRequired
+myrest -h localhost -u root -p password -d my_database --jwtSecret "my_super_secure_secret" --jwtRequired
 ```
 
 ## 2. Authentication
@@ -54,9 +54,9 @@ You can generate a JWT using any standard library or online tool (like [jwt.io](
 
 ## 3. Implementing Row Level Security (RLS)
 
-When a request is received, `xmysql` automatically executes `SET` statements for each claim in the JWT before running the API query. The variables are prefixed with `@request_jwt_claim_`.
+When a request is received, `myrest` automatically executes `SET` statements for each claim in the JWT before running the API query. The variables are prefixed with `@request_jwt_claim_`.
 
-For the example payload above, `xmysql` executes:
+For the example payload above, `myrest` executes:
 ```sql
 SET @request_jwt_claim_sub = 'user_123';
 SET @request_jwt_claim_role = 'customer';
@@ -119,7 +119,7 @@ WHERE
 ```
 
 ### Variable Sanitization
-`xmysql` sanitizes claim keys to ensure they are valid MySQL variable names. Any character that is not alphanumeric or an underscore is replaced with an underscore `_`.
+`myrest` sanitizes claim keys to ensure they are valid MySQL variable names. Any character that is not alphanumeric or an underscore is replaced with an underscore `_`.
 
 -   Claim: `https://example.com/role`
 -   Variable: `@request_jwt_claim_https___example_com_role`
