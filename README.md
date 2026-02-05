@@ -463,12 +463,37 @@ http://localhost:3000/download?name=fileName
     -p, --password <n>       password of database / empty by default
     -n, --portNumber <n>     port number / 3000 by default
     -s, --storageFolder <n>  storage folder / current working dir by default
+    --databaseUrl <n>        database connection URL with optional SSL support
+    --jwtSecret <n>          JWT secret for token validation
+    --jwtRequired            require JWT for all requests (default: false)
     -h, --help               output usage information
 
   Examples:
 
     $ myrest -u username -p password -d databaseSchema
+    $ myrest --databaseUrl "mysql://user:pass@host:3306/db?ssl=true"
 ```
+
+### DATABASE_URL Connection String (New!)
+
+myrest now supports connecting via a single `DATABASE_URL` parameter, making it easier to use with cloud platforms and supporting SSL connections.
+
+**Basic usage:**
+```bash
+myrest --databaseUrl "mysql://user:password@host:3306/database"
+```
+
+**With SSL:**
+```bash
+myrest --databaseUrl "mysql://user:password@host:3306/database?ssl=true"
+```
+
+**Docker with DATABASE_URL:**
+```bash
+docker run -p 3000:3000 -e DATABASE_URL="mysql://root:password@mysql:3306/db?ssl=true" -d myrest
+```
+
+For detailed information including SSL configuration options, URL encoding, and cloud platform integration, see [docs/DATABASE_URL.md](docs/DATABASE_URL.md).
 
 
 # Docker
@@ -490,9 +515,23 @@ You can also pass the environment variables to a file and use them as an option 
 
 environment variables which can be used:
 
+**Option 1: DATABASE_URL (recommended for cloud deployments & SSL)**
+```
+ENV DATABASE_URL mysql://user:password@host:3306/database?ssl=true
+```
+
+**Option 2: Individual parameters (backward compatible)**
 ```
 ENV DATABASE_HOST 127.0.0.1
 ENV DATABASE_USER root
 ENV DATABASE_PASSWORD password
 ENV DATABASE_NAME sakila
 ```
+
+**JWT Authentication:**
+```
+ENV JWT_SECRET yoursecretkey
+ENV JWT_REQUIRED false
+```
+
+See [docs/DATABASE_URL.md](docs/DATABASE_URL.md) for complete DATABASE_URL documentation including SSL options.

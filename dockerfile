@@ -13,6 +13,9 @@ COPY lib/ /usr/src/app/lib
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 # env 
+# Option 1: Use DATABASE_URL for connection (supports SSL)
+# ENV DATABASE_URL mysql://user:password@host:port/database?ssl=true
+# Option 2: Use individual parameters
 ENV DATABASE_HOST 127.0.0.1
 ENV DATABASE_USER root
 ENV DATABASE_PASSWORD password

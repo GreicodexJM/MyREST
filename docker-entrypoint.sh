@@ -1,8 +1,14 @@
 #!/bin/sh
 cd /usr/src/app/
 
-# Build the base command
-CMD="node index.js -h $DATABASE_HOST -p $DATABASE_PASSWORD -d $DATABASE_NAME -u $DATABASE_USER"
+# Check if DATABASE_URL is provided
+if [ -n "$DATABASE_URL" ]; then
+  # Use DATABASE_URL for connection
+  CMD="node index.js --databaseUrl $DATABASE_URL"
+else
+  # Build the base command with individual parameters
+  CMD="node index.js -h $DATABASE_HOST -p $DATABASE_PASSWORD -d $DATABASE_NAME -u $DATABASE_USER"
+fi
 
 # Add JWT secret if provided
 if [ -n "$JWT_SECRET" ]; then

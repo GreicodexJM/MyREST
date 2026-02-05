@@ -25,3 +25,18 @@ services:
       - JWT_REQUIRED=false
     depends_on:
       - mysql
+  
+  # Example using DATABASE_URL with SSL
+  myrest-url:
+    build: .
+    image: greicodex/myrest:latest
+    ports:
+      - 3001:3000
+    environment:
+      # DATABASE_URL format: mysql://user:password@host:port/database?ssl=true
+      # SSL options: ssl=true (basic), ssl=required (strict), or ssl=false (disabled)
+      - DATABASE_URL=mysql://root:toor@mysql:3306/mysql?ssl=false
+      - JWT_SECRET=
+      - JWT_REQUIRED=false
+    depends_on:
+      - mysql
