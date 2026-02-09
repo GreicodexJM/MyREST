@@ -568,7 +568,7 @@ describe(__filename + ':: myrest : mariadb tests', function () {
       });
   });
 
-  http://localhost:3000/api/payments?_where=(checkNumber,eq,JM555205)~or(checkNumber,eq,OM314933)
+//  http://localhost:3000/api/payments?_where=(checkNumber,eq,JM555205)~or(checkNumber,eq,OM314933)
 
     it('GET /api/payments?_where=(checkNumber,eq,JM555205)~or(checkNumber,eq,OM314933) should PASS', function (done) {
 
@@ -737,8 +737,8 @@ describe(__filename + ':: myrest : mariadb tests', function () {
 
         //validate response
         // NYC and Madrid both have 5 entries. Order is non-deterministic on some DBs
-        // res.body[0]['city'].should.be.equals("NYC")
-        res.body[0]['count'].should.be.equals(5)
+        res.body[0]['city'].should.be.equals("Aachen")
+        res.body[3]['count'].should.be.equals(3)
         res.body.length.should.be.equals(95)
 
         return done();

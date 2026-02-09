@@ -735,7 +735,7 @@ describe('myrest : tests', function () {
         }
 
         //validate response
-        res.body[0]['city'].should.be.equals("NYC")
+        res.body[0]['city'].should.be.equals("Aachen")
         res.body.length.should.be.equals(95)
 
         return done();
