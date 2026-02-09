@@ -2,9 +2,18 @@
 
 ## Current Focus
 - PostgREST compatibility enhancements.
+- RLS (Row Level Security) improvements and automation.
 - Bug fixes for JSON column handling and foreign key relationship queries.
 
 ## Recent Changes
+- **Auto-Create RLS Policies Table**: Implemented automatic creation of `_rls_policies` table during gateway initialization.
+  - Added `ensureRlsPoliciesTable()` method to `lib/xsql.js` that creates the table if it doesn't exist.
+  - Integrated into `init()` flow to run before `loadRlsPolicies()`.
+  - Uses `CREATE TABLE IF NOT EXISTS` for idempotent operation.
+  - Gracefully handles creation failures without blocking startup.
+  - Added console logging: "RLS policies table ready" on success.
+  - Updated `docs/SECURITY_RLS.md` to reflect automatic table creation.
+  - **Resolved**: Zero-configuration setup for RLS - users no longer need to manually create the policies table.
 - **Fixed JSON Column Serialization Bug**: Resolved issue where JavaScript objects were converted to `'[object Object]'` instead of proper JSON strings for JSON-type columns.
   - Added `serializeJsonColumns()` helper in `lib/util/data.helper.js` to properly serialize objects/arrays to JSON strings.
   - Updated `create()`, `update()`, and `patch()` methods in `lib/xapi.js` to pre-process request bodies.

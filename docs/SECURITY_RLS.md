@@ -83,12 +83,14 @@ SET @request_jwt_claim_email = 'alice@example.com';
 
 ### Step-by-Step RLS Example
 
-#### 1. Create the RLS Policies Table
+#### 1. RLS Policies Table (Auto-Created)
 
-First, create the policies table (this should be done once during setup):
+The `_rls_policies` table is **automatically created** when MyREST starts. You don't need to manually create it - the gateway will ensure it exists during initialization.
+
+If you want to verify the schema, it looks like this:
 
 ```sql
-CREATE TABLE _rls_policies (
+CREATE TABLE IF NOT EXISTS _rls_policies (
   id INT PRIMARY KEY AUTO_INCREMENT,
   table_name VARCHAR(255) NOT NULL,
   policy_name VARCHAR(255) NOT NULL,
