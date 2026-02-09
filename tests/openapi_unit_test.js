@@ -3,7 +3,7 @@
 var should = require('should');
 var openapiHelper = require('../lib/util/openapi.helper.js');
 
-describe('OpenAPI Generator Unit Tests', function () {
+describe(__filename + ':: OpenAPI Generator Unit Tests', function () {
 
     it('should generate valid OpenAPI spec from metaDb', function (done) {
         

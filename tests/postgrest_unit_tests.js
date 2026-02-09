@@ -3,7 +3,7 @@
 var should = require('should');
 var postgrestWhereClause = require('../lib/util/postgrestWhereClause.helper.js');
 
-describe('postgrest where clause unit tests', function () {
+describe(__filename + ':: postgrest where clause unit tests', function () {
 
   it('eq operator ?id=eq.123 should PASS', function (done) {
     var err = postgrestWhereClause.getWhereClause({ id: 'eq.123' })

@@ -3,7 +3,7 @@
 var should = require('should');
 var selectParser = require('../lib/util/selectParser.helper.js');
 
-describe('PostgREST FK Hint Syntax Unit Tests', function () {
+describe(__filename + ':: PostgREST FK Hint Syntax Unit Tests', function () {
 
   it('should parse simple column:table() hint syntax', function (done) {
     var result = selectParser.parseSelect('id,trading_partner_id:trading_partner_templates(*)');

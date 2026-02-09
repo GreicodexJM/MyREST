@@ -21,7 +21,7 @@ let xapi;
 let pool;
 let server;
 
-describe('PostgREST Response Format Tests', function () {
+describe(__filename + ':: PostgREST Response Format Tests', function () {
     this.timeout(10000);
 
     before(function (done) {

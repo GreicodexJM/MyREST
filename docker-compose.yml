@@ -17,26 +17,15 @@ services:
     ports:
       - 3000:3000
     environment:
-      - DATABASE_HOST=mysql
-      - DATABASE_USER=root
-      - DATABASE_PASSWORD=toor
-      - DATABASE_NAME=mysql
-      - JWT_SECRET=
-      - JWT_REQUIRED=false
+#      - DATABASE_HOST=mysql
+#      - DATABASE_USER=root
+#      - DATABASE_PASSWORD=toor
+#      - DATABASE_NAME=mysql
+#  # Example using DATABASE_URL with SSL
+      - DATABASE_URL=mysql://root:toor@mysql:3306/mysql?ssl=false
+      - JWT_SECRET=wdlnds_secret_token
+      - JWT_REQUIRED=true
     depends_on:
       - mysql
   
-  # Example using DATABASE_URL with SSL
-  myrest-url:
-    build: .
-    image: greicodex/myrest:latest
-    ports:
-      - 3001:3000
-    environment:
-      # DATABASE_URL format: mysql://user:password@host:port/database?ssl=true
-      # SSL options: ssl=true (basic), ssl=required (strict), or ssl=false (disabled)
-      - DATABASE_URL=mysql://root:toor@mysql:3306/mysql?ssl=false
-      - JWT_SECRET=
-      - JWT_REQUIRED=false
-    depends_on:
-      - mysql
+

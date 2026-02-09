@@ -20,7 +20,7 @@ args['password'] = 'toor'
 args['database'] = 'classicmodels'
 args['decimalNumbers'] = true
 
-describe('myrest : postgrest embedding tests', function () {
+describe(__filename + ':: myrest : postgrest embedding tests', function () {
 
   before(function (done) {
     mysqlPool = mysql.createPool(args)

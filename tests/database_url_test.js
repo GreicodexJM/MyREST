@@ -48,7 +48,7 @@ function parseConnectionUrl(url) {
   }
 }
 
-describe('DATABASE_URL Parsing', function() {
+describe(__filename + ':: DATABASE_URL Parsing', function() {
 
   it('should parse basic URL without SSL', function() {
     const url = 'mysql://root:password@localhost:3306/mydb';

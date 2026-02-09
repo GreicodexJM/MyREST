@@ -76,12 +76,7 @@ test: test-unit ## Run all tests
 
 test-unit: ## Run unit tests
 	@echo "$(BLUE)Running unit tests...$(NC)"
-	$(MOCHA) tests/json_serialization_test.js \
-		tests/postgrest_unit_tests.js \
-		tests/postgrest_fk_hint_test.js \
-		tests/jwt_rls_unit_test.js \
-		tests/openapi_unit_test.js \
-		--exit
+	$(MOCHA) tests/*.js --exit
 
 test-integration: ## Run integration tests (requires database)
 	@echo "$(BLUE)Running integration tests...$(NC)"

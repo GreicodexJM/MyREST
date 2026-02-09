@@ -26,7 +26,7 @@ args['decimalNumbers'] = true
 
 
 //desribe group of tests done
-describe('myrest : mariadb tests', function () {
+describe(__filename + ':: myrest : mariadb tests', function () {
 
   before(function (done) {
 

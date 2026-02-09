@@ -3,7 +3,7 @@
 var should = require('should');
 var Xsql = require('../lib/xsql.js');
 
-describe('JWT and RLS Unit Tests', function () {
+describe(__filename + ':: JWT and RLS Unit Tests', function () {
 
     it('should set session variables when context is provided', function (done) {
         

@@ -22,7 +22,7 @@ let xapi = new Xapi({ ...dbConfig, dynamic: 0 }, pool, app);
 let server;
 let client;
 
-describe('PostgREST SDK Tests', function() {
+describe(__filename + ':: PostgREST SDK Tests', function() {
     this.timeout(10000);
 
     // Helper to start server

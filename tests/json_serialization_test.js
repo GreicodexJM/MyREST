@@ -3,7 +3,7 @@
 var should = require('should');
 var dataHelper = require('../lib/util/data.helper.js');
 
-describe('JSON Column Serialization Unit Tests', function () {
+describe(__filename + ':: JSON Column Serialization Unit Tests', function () {
 
   it('should serialize nested objects in JSON columns', function (done) {
     let metaDb = {
