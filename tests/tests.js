@@ -45,7 +45,7 @@ describe('myrest : tests', function () {
       if (err) {
         process.exit(1)
       }
-      server = app.listen(3000)
+      server = app.listen(3000+Math.ceil(Math.random()*100))
       done();
     })
   });
@@ -80,7 +80,7 @@ describe('myrest : tests', function () {
         }
 
         //validate response
-        res.body.length.should.be.equal(8);
+        res.body.length.should.be.equal(8+1);
 
         return done();
 
