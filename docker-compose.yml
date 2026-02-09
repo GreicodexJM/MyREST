@@ -5,12 +5,16 @@ services:
       - MYSQL_ROOT_PASSWORD=toor
     ports:
       - 3307:3306
+    volumes:
+      - ./tests/sample.sql:/docker-entrypoint-initdb.d/sample.sql
   mysql:
     image: mysql
     environment:
       - MYSQL_ROOT_PASSWORD=toor
     ports:
       - 3306:3306
+    volumes:
+      - ./tests/sample.sql:/docker-entrypoint-initdb.d/sample.sql
   myrest:
     build: .
     image: greicodex/myrest:latest
@@ -20,9 +24,9 @@ services:
 #      - DATABASE_HOST=mysql
 #      - DATABASE_USER=root
 #      - DATABASE_PASSWORD=toor
-#      - DATABASE_NAME=mysql
+#      - DATABASE_NAME=classicmodels
 #  # Example using DATABASE_URL with SSL
-      - DATABASE_URL=mysql://root:toor@mysql:3306/mysql?ssl=false
+      - DATABASE_URL=mysql://root:toor@mysql:3306/classicmodels?ssl=false
       - JWT_SECRET=wdlnds_secret_token
       - JWT_REQUIRED=true
     depends_on:

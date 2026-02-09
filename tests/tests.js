@@ -80,7 +80,7 @@ describe('myrest : tests', function () {
         }
 
         //validate response
-        res.body.length.should.be.equal(8+1);
+        res.body.length.should.be.equal(8);
 
         return done();
 
