@@ -20,5 +20,9 @@ if [ "$JWT_REQUIRED" = "true" ]; then
   CMD="$CMD --jwtRequired"
 fi
 
+if [ -n "$CORS_ORIGIN" ]; then
+  CMD="$CMD --corsOrigin $CORS_ORIGIN"
+fi
+
 # Execute the command
 exec $CMD

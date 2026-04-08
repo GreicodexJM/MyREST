@@ -131,6 +131,31 @@ This can be used with Swagger UI or other tools to explore the API.
 - `Prefer: count=exact`: Returns total count in `Content-Range` header.
 - `Prefer: return=representation`: Returns the created/updated/deleted rows in the response body.
 
+## CORS Configuration
+myrest includes built-in CORS (Cross-Origin Resource Sharing) support to enable secure cross-origin requests from web browsers.
+
+**Quick Start:**
+```bash
+# Development - Allow all origins (default)
+myrest -u user -p password -d mydb
+
+# Production - Specific origin
+myrest -u user -p password -d mydb --corsOrigin "https://myapp.com"
+
+# Multiple origins
+myrest -u user -p password -d mydb --corsOrigin "https://app1.com,https://app2.com"
+```
+
+**Available Options:**
+- `--corsOrigin`: Allowed origins (* for all, or comma-separated list)
+- `--corsMethods`: Allowed HTTP methods
+- `--corsAllowedHeaders`: Headers clients can include
+- `--corsExposedHeaders`: Headers browsers can access
+- `--corsCredentials`: Allow cookies/credentials
+- `--corsMaxAge`: Preflight cache duration
+
+For detailed CORS configuration, security best practices, and troubleshooting, see [docs/CORS_CONFIGURATION.md](docs/CORS_CONFIGURATION.md).
+
 ## Security & Row Level Security (RLS)
 myrest supports JWT-based authentication and mechanism for Row Level Security (RLS) similar to PostgREST.
 
@@ -466,6 +491,12 @@ http://localhost:3000/download?name=fileName
     --databaseUrl <n>        database connection URL with optional SSL support
     --jwtSecret <n>          JWT secret for token validation
     --jwtRequired            require JWT for all requests (default: false)
+    --corsOrigin <n>         CORS allowed origins (* for all, or comma-separated)
+    --corsMethods <n>        CORS allowed methods
+    --corsAllowedHeaders <n> CORS allowed headers
+    --corsExposedHeaders <n> CORS exposed headers
+    --corsCredentials        CORS allow credentials
+    --corsMaxAge <n>         CORS preflight cache duration
     -h, --help               output usage information
 
   Examples:
@@ -534,4 +565,12 @@ ENV JWT_SECRET yoursecretkey
 ENV JWT_REQUIRED false
 ```
 
+**CORS Configuration:**
+```
+ENV CORS_ORIGIN https://myapp.com,https://admin.myapp.com
+ENV CORS_METHODS GET,POST,PUT,PATCH,DELETE,OPTIONS
+ENV CORS_CREDENTIALS true
+```
+
 See [docs/DATABASE_URL.md](docs/DATABASE_URL.md) for complete DATABASE_URL documentation including SSL options.
+See [docs/CORS_CONFIGURATION.md](docs/CORS_CONFIGURATION.md) for complete CORS documentation.
