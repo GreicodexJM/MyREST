@@ -154,6 +154,20 @@ all: clean install test docker-build ## Clean, install, test, and build Docker i
 release: test docker-build docker-push ## Test, build, and push Docker image
 	@echo "$(GREEN)✓ Release complete: $(DOCKER_IMAGE):$(DOCKER_TAG)$(NC)"
 
+# ─── JIRA INTEGRATION ─────────────────────────────────────────────────────
+JIRA_KEY ?=
+
+jira-comment: ## Post release comment to Jira ticket (requires JIRA_KEY)
+	@if [ -n "$(JIRA_KEY)" ]; then \
+		acli jira workitem comment create --key "$(JIRA_KEY)" \
+			--body "Docker image pushed: $(DOCKER_IMAGE):$(DOCKER_TAG). Time: $$(date -u +%Y-%m-%dT%H:%M:%SZ)"; \
+		echo "$(GREEN)✓ Jira comment posted to $(JIRA_KEY)$(NC)"; \
+	else \
+		echo "$(YELLOW)⚠ No JIRA_KEY set — skipping Jira comment$(NC)"; \
+	fi
+
+release-jira: release jira-comment ## Release + notify Jira
+
 ci: install test-unit ## Run CI pipeline (install and test)
 	@echo "$(GREEN)✓ CI pipeline complete$(NC)"
 
