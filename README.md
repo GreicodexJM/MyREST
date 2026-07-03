@@ -49,6 +49,7 @@ That's it!
 * Upload multiple files
 * Download file
 * PostgREST compatible API syntax
+* Multi-database mode — serve several databases from one instance via PostgREST profile headers or `db.table` names (see [docs/MULTI_DATABASE.md](docs/MULTI_DATABASE.md))
 * Group By, Having - Work in Progress - :racehorse::racehorse:
 
 Use HTTP clients like [Postman](https://www.getpostman.com/) or [similar tools](https://chrome.google.com/webstore/search/http%20client?_category=apps) to invoke REST API calls

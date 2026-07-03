@@ -35,43 +35,54 @@ describe('Refactored Modules Tests', function() {
   describe('URL Middleware', function() {
     it('should extract table name from simple route', function() {
       const req = {
-        originalUrl: '/api/users?_where=(id,eq,1)',
-        app: { locals: {} }
+        originalUrl: '/api/users?_where=(id,eq,1)'
       };
-      const res = {};
+      const res = { locals: {} };
       const next = function() {};
 
       urlMiddleware(req, res, next);
-      
-      req.app.locals._tableName.should.equal('users');
+
+      res.locals._tableName.should.equal('users');
     });
 
     it('should extract parent and child tables from relational route', function() {
       const req = {
-        originalUrl: '/api/users/123/posts',
-        app: { locals: {} }
+        originalUrl: '/api/users/123/posts'
       };
-      const res = {};
+      const res = { locals: {} };
       const next = function() {};
 
       urlMiddleware(req, res, next);
-      
-      req.app.locals._parentTable.should.equal('users');
-      req.app.locals._childTable.should.equal('posts');
+
+      res.locals._parentTable.should.equal('users');
+      res.locals._childTable.should.equal('posts');
+    });
+
+    it('should treat exists route as table route, not relational', function() {
+      const req = {
+        originalUrl: '/api/users/123/exists'
+      };
+      const res = { locals: {} };
+      const next = function() {};
+
+      urlMiddleware(req, res, next);
+
+      res.locals._tableName.should.equal('users');
+      should.not.exist(res.locals._parentTable);
+      should.not.exist(res.locals._childTable);
     });
 
     it('should not set table names for non-API routes', function() {
       const req = {
-        originalUrl: '/some/other/route',
-        app: { locals: {} }
+        originalUrl: '/some/other/route'
       };
-      const res = {};
+      const res = { locals: {} };
       const next = function() {};
 
       urlMiddleware(req, res, next);
-      
-      should.not.exist(req.app.locals._tableName);
-      should.not.exist(req.app.locals._parentTable);
+
+      should.not.exist(res.locals._tableName);
+      should.not.exist(res.locals._parentTable);
     });
   });
 

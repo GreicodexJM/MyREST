@@ -29,5 +29,10 @@ if [ -n "$STORAGE_FOLDER" ]; then
   CMD="$CMD -s $STORAGE_FOLDER"
 fi
 
+# Multi-database mode: comma-separated list of databases to expose
+if [ -n "$DATABASES" ]; then
+  CMD="$CMD --databases $DATABASES"
+fi
+
 # Execute the command
 exec $CMD
