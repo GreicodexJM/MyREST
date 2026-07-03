@@ -27,7 +27,8 @@ services:
 #      - DATABASE_NAME=classicmodels
 #  # Example using DATABASE_URL with SSL
       - DATABASE_URL=mysql://root:toor@mysql:3306/classicmodels?ssl=false
-      - JWT_SECRET=wdlnds_secret_token
+      # Set JWT_SECRET in your shell or a .env file (never commit real secrets)
+      - JWT_SECRET=${JWT_SECRET:-dev_only_secret_do_not_use_in_prod}
       - JWT_REQUIRED=true
     depends_on:
       - mysql

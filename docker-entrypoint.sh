@@ -24,5 +24,10 @@ if [ -n "$CORS_ORIGIN" ]; then
   CMD="$CMD --corsOrigin $CORS_ORIGIN"
 fi
 
+# Add storage folder for file uploads/downloads if provided
+if [ -n "$STORAGE_FOLDER" ]; then
+  CMD="$CMD -s $STORAGE_FOLDER"
+fi
+
 # Execute the command
 exec $CMD
