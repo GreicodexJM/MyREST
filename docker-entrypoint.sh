@@ -34,5 +34,13 @@ if [ -n "$DATABASES" ]; then
   CMD="$CMD --databases $DATABASES"
 fi
 
+# Optional CORS overrides
+if [ -n "$CORS_ALLOWED_HEADERS" ]; then
+  CMD="$CMD --corsAllowedHeaders $CORS_ALLOWED_HEADERS"
+fi
+if [ -n "$CORS_METHODS" ]; then
+  CMD="$CMD --corsMethods $CORS_METHODS"
+fi
+
 # Execute the command
 exec $CMD
